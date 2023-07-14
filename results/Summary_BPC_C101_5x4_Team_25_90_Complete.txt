@@ -1,0 +1,5 @@
+Parameter;Value
+Instance;C101
+Algorithm;BPC
+Feasible;1
+ObjectiveFunction;2561.035306448867

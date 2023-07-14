@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="INSTANCE_FOLDER">./data/Kovacs/</entry>
+<entry key="RESULT_FOLDER">./results/</entry> 
+<entry key="SOLUTIONS_FOLDER">./solutions/Kovacs/</entry> 
+
+<entry key="PRECISION">6</entry> 
+
+<entry key="SOLVER_PRECISION">6</entry> 
+<entry key="SOLVER_NB_THREADS">1</entry> 
+<entry key="SOLVER_LOG_FOLDER">./gurobi/log/</entry> 
+<entry key="SOLVER_LP_FOLDER">./gurobi/lp/</entry> 
+
+<entry key="DRIVING_SPEED">60</entry> 
+<entry key="WALKING_SPEED">4</entry> 
+<entry key="FIXED_COST">0</entry> 
+<entry key="VARIABLE_COST">1</entry> 
+<entry key="MAX_WD_B2P">2.5</entry> 
+<entry key="SUBTOUR_TIME_LIMIT">300</entry>
+<entry key="ROUTE_WALKING_DISTANCE_LIMIT">5.0</entry>
+
+</properties>
