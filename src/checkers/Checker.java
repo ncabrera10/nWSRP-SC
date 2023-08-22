@@ -33,11 +33,11 @@ public class Checker {
 		String instance_type = "";
 		int instance_number =  -1;
 		if(instance.length() == 5) {
-			instance.substring(0,2);
-			Integer.parseInt(instance.substring(2,4));
+			instance_type = instance.substring(0,2);
+			instance_number = Integer.parseInt(instance.substring(2,4));
 		}else {
-			instance.substring(0,1);
-			Integer.parseInt(instance.substring(1,3));
+			instance_type = instance.substring(0,1);
+			instance_number =Integer.parseInt(instance.substring(1,3));
 		}
 		
 		String skills = parts[6];
@@ -59,12 +59,12 @@ public class Checker {
 		
 		//4. Prints the report:
 			
-			printReport(algorithm,instance,skills,version,solution,data);
+			printReport(algorithm,instance,skills,version,solution,data,maxPerTeam);
 			
 	}	
 	
 	
-	public void printReport(String algorithm,String instance,String skills, String version,Solution solution,DataHandler data) {
+	public void printReport(String algorithm,String instance,String skills, String version,Solution solution,DataHandler data, int maxPerTeam) {
 		
 		
 		//Creates a path to print the report:
@@ -72,9 +72,9 @@ public class Checker {
 			String ruta = "";
 			String ruta_details = "";
 			
-			ruta = GlobalParameters.RESULT_FOLDER+"Report_"+algorithm+"_"+instance+"_"+skills+"_"+version+("_"+DataHandler.instance_numNodes+"_"+DataHandler.instance_numTechnicians+"_"+DataHandler.instance_technician)+".txt";
-			ruta_details = GlobalParameters.RESULT_FOLDER+"DetailsReport_"+algorithm+"_"+instance+"_"+skills+"_"+version+("_"+DataHandler.instance_numNodes+"_"+DataHandler.instance_numTechnicians+"_"+DataHandler.instance_technician)+".txt";
-			String ruta_summary = GlobalParameters.RESULT_FOLDER+"Summary_"+algorithm+"_"+instance+"_"+skills+"_"+version+("_"+DataHandler.instance_numNodes+"_"+DataHandler.instance_numTechnicians+"_"+DataHandler.instance_technician)+".txt";
+			ruta = GlobalParameters.RESULT_FOLDER+"Report_"+algorithm+"_"+instance+"_"+skills+"_"+version+"_"+maxPerTeam+("_"+DataHandler.instance_numNodes+"_"+DataHandler.instance_numTechnicians+"_"+DataHandler.instance_technician)+".txt";
+			ruta_details = GlobalParameters.RESULT_FOLDER+"DetailsReport_"+algorithm+"_"+instance+"_"+skills+"_"+version+"_"+maxPerTeam+("_"+DataHandler.instance_numNodes+"_"+DataHandler.instance_numTechnicians+"_"+DataHandler.instance_technician)+".txt";
+			String ruta_summary = GlobalParameters.RESULT_FOLDER+"Summary_"+algorithm+"_"+instance+"_"+skills+"_"+version+"_"+maxPerTeam+("_"+DataHandler.instance_numNodes+"_"+DataHandler.instance_numTechnicians+"_"+DataHandler.instance_technician)+".txt";
 			
 		//Main logic:
 		
@@ -208,9 +208,12 @@ public class Checker {
 				
 				while(!line.equals("---")) {
 					String[] attrs = line.split(";");
-					int profile_id = Integer.parseInt(attrs[0]);
+					int profile_id = Integer.parseInt(attrs[0])-1;
 					int num_w = Integer.parseInt(attrs[1]);
 					int route_id = Integer.parseInt(attrs[2]);
+					
+					
+					
 					if(sol.getProfiles_ids().containsKey(route_id)) {
 						sol.getProfiles_ids().get(route_id).add(profile_id);
 						sol.getProfiles_number_ids().get(route_id).add(num_w);

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import parameters.GlobalParameters;
@@ -423,7 +422,7 @@ public class DataHandler {
 		// Create the path to the instance file:
 		
 			String path_to_file = GlobalParameters.INSTANCE_FOLDER;
-		
+			
 			if(instance_technician.equals("Complete")) {
 				if(instance_version.equals("Team")) {
 					path_to_file += "technicians_Team/technicians_"+instance_skills+"x"+instance_levels+"_"+instance_version+".txt";
@@ -433,8 +432,13 @@ public class DataHandler {
 			}else {
 				if(instance_version.equals("Team")) {
 					String inst = ""+instance_number;
-					String first_number = inst.substring(2);
-					path_to_file += "techniciansReduced_Team/"+instance_type+first_number+"/technicians_"+instance_skills+"x"+instance_levels+"_"+instance_version+"_"+"long"+".txt";
+					String first_number = inst.substring(0,1);
+					if(first_number.equals("1")) {
+						path_to_file += "techniciansReduced_Team/"+instance_type+first_number+"/technicians_"+instance_skills+"x"+instance_levels+"_"+instance_version+"_"+"long"+".txt";
+						
+					}else {
+						path_to_file += "techniciansReduced_Team/"+instance_type+first_number+"/technicians_"+instance_skills+"x"+instance_levels+"_"+instance_version+"_"+"short"+".txt";	
+					}
 				}else {
 					path_to_file += "techniciansReduced_noTeam/technicians_"+instance_dataFile;
 				}
@@ -498,6 +502,7 @@ public class DataHandler {
 					}
 					
 					
+					/**
 					// Update the number available for each profile: 
 					
 					if(GraphManager.workerNodes.size() < instance_numTechnicians) {
@@ -524,7 +529,22 @@ public class DataHandler {
 							GraphManager.workerNodes.add(node);
 						}
 					}
+					*/
 					
+					// Update the number available for each profile: 
+					
+					if(GraphManager.workerNodes.size() < instance_numTechnicians) {
+							int profile_id = -1;
+
+							GraphManager.number_of_unique_workers ++;
+							profile_id = GraphManager.number_of_unique_workers;
+							
+							// Create the node:
+							
+							WorkerNode node = new WorkerNode(id,skills_requirements,key,profile_id);
+							GraphManager.workerNodes.add(node);
+						
+					}
 					
 					
 					
@@ -597,79 +617,9 @@ public class DataHandler {
 	 */
 	public void createArcs() {
 		
-		// Arcs in the workers graph:
 		
-			// Arcs from the source node to each worker node:
+
 		
-				for(WorkerNode node:GraphManager.workerNodes) {
-					
-					int cap = GraphManager.number_of_workers_available_per_profile.get(node.skills_key);
-					
-					for(int i = 1; i <= cap; i++) {
-						
-						GraphManager.arcs_g1.put(0+"-"+node.id+"-"+i, new Arc(GraphManager.sourceNode,node,0,0,0,1,i)); //We will assume these are driving arcs
-						
-						
-					}
-					
-					
-				}
-			
-				
-				
-			// Arcs from each worker node to the source depot node:
-			
-		
-				for(WorkerNode node:GraphManager.workerNodes) {
-					
-					GraphManager.arcs_g1.put(node.id+"-"+0+" - "+1, new Arc(node,GraphManager.sourceDepotNode,0,0,0,1)); //We will assume these are driving arcs
-					
-				}
-				
-			
-				
-			// If the team version is allowed:
-			
-			
-				if(instance_version.equals("Team")) {
-					
-					// Arcs from each worker node, to the next worker nodes:
-					
-					for(int i = 0; i < GraphManager.number_of_workers; i++) {
-						
-						WorkerNode node = GraphManager.workerNodes.get(i);
-						
-						for(int j = i;j < GraphManager.number_of_workers; j++) {
-							
-							WorkerNode node2 = GraphManager.workerNodes.get(j);
-							
-							int cap = GraphManager.number_of_workers_available_per_profile.get(node2.skills_key);
-							
-							for(int k = 1; k <= cap; k++) {
-								
-								GraphManager.arcs_g1.put(node.id+"-"+node2.id+" - "+k,new Arc(node,node2,0,0,0,1,k));
-								
-								
-							}
-							
-						}
-						
-					}
-					
-					
-				}
-			
-			
-			
-			// If skills are not to be considered:
-				
-				
-					GraphManager.arcs_g1.put(GraphManager.sourceNode+"-"+GraphManager.sourceDepotNode,new Arc(GraphManager.sourceNode,GraphManager.sourceDepotNode,0,0,0,1));
-					
-				
-			
-		// Arcs in the customer graph:----------------------------------
-				
 			// Driving arcs arriving to any customer:
 				
 				// Arcs from the source depot:
@@ -783,7 +733,9 @@ public class DataHandler {
 							GraphManager.arcs_g2.put(node.id+"_"+GraphManager.sourceDepotNode.id, new Arc(node,GraphManager.sourceDepotNode,distance,0,time,2));
 								
 						}
-					}		
+					}	
+					
+		
 	}
 	
 	/**
